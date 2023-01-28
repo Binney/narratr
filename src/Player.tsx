@@ -1,5 +1,5 @@
-import { useState } from "react";
-import ChapterPlayer from "./Chapter";
+import { useCallback, useState } from "react";
+import CurrentChapter from "./CurrentChapter";
 import LockedChapter, { HistoryItem } from "./LockedChapter";
 import { Story } from "./stories/Story";
 
@@ -20,7 +20,7 @@ export default (props: PlayerProps) => {
     const [current, setCurrent] = useState(0);
     const [history, setHistory] = useState<HistoryItem[]>([]);
 
-    const handleSelect = (choice?: number, anchor?: string) => {
+    const handleSelect = (anchor?: string, choice?: number) => {
         history.push({ chapter: props.story.chapters[current], choice });
         setHistory(history);
 
@@ -30,6 +30,6 @@ export default (props: PlayerProps) => {
 
     return <div>
         {history.map((historyItem, i) => <div key={i}>{LockedChapter(historyItem)}</div>)}
-        <ChapterPlayer chapter={props.story.chapters[current]} onSelect={handleSelect}></ChapterPlayer>
+        <CurrentChapter key={current} chapter={props.story.chapters[current]} onSelect={handleSelect}></CurrentChapter>
     </div>
 }
