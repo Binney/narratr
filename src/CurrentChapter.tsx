@@ -9,14 +9,14 @@ interface ChapterProps {
 const timeoutNormal = 50;
 const timeoutBreath = 300;
 
-export default (props: ChapterProps) => {
+export default function CurrentChapter(props: ChapterProps) {
     const [textProgress, setTextProgress] = useState(0);
     const [showChoices, setShowChoices] = useState(false);
 
     const words = props.chapter.prose.split(' ');
-    function getText(progress: number) {
+    const getText = useCallback((progress: number) => {
         return words.slice(0, progress).join(' ');
-    }
+    }, [words]);
 
     useEffect(() => {
         let hasPause = getText(textProgress).match(/[,.?!]$/);
@@ -27,7 +27,7 @@ export default (props: ChapterProps) => {
                 setTextProgress(textProgress + 1);
             }
         }, hasPause ? timeoutBreath : timeoutNormal);
-    }, [textProgress]);
+    }, [textProgress, getText, words]);
 
     function ActiveChoices(chapter: Chapter) {
         if (chapter.choices) {
@@ -41,7 +41,6 @@ export default (props: ChapterProps) => {
                 <button onClick={() => props.onSelect(chapter.link)}>Next &gt;</button>
             </div>
         }
-
     }
 
     return <div>

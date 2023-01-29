@@ -5,12 +5,7 @@ export interface HistoryItem {
     choice?: number
 }
 
-interface Props {
-    chapter: Chapter,
-    choice?: number
-}
-
-export default (props: HistoryItem) => {
+export default function LockedChapter(props: HistoryItem) {
     function LockedChoice(choice: number) {
         if (!props.chapter.choices) {
             return; // nothing
