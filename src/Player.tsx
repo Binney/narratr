@@ -16,7 +16,7 @@ function findChapterFromAnchor(story: Story, anchor: string): number {
     throw new Error(`Couldn't find chapter with anchor ${anchor}`);
 }
 
-export default (props: PlayerProps) => {
+export default function Player(props: PlayerProps) {
     const [current, setCurrent] = useState(0);
     const [history, setHistory] = useState<HistoryItem[]>([]);
 

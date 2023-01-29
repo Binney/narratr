@@ -15,8 +15,9 @@ const timeoutBreath = 300;
 export default function CurrentChapter(props: ChapterProps) {
     const [textProgress, setTextProgress] = useState(0);
     const [showChoices, setShowChoices] = useState(false);
+    const { chapter, onSelect, onUpdate } = props;
 
-    const words = props.chapter.prose.split(' ');
+    const words = chapter.prose.split(' ');
     const getText = useCallback((progress: number) => {
         return words.slice(0, progress).join(' ');
     }, [words]);
@@ -29,17 +30,17 @@ export default function CurrentChapter(props: ChapterProps) {
             } else {
                 setTextProgress(textProgress + 1);
             }
-            props.onUpdate();
+            onUpdate();
         }, hasPause ? timeoutBreath : timeoutNormal);
-    }, [textProgress, getText, words]);
+    }, [textProgress, getText, words, onUpdate]);
 
     function ActiveChoices(chapter: Chapter) {
         if (chapter.choices) {
             return chapter.choices.map((choice, i) =>
-                <button key={i} onClick={() => props.onSelect(choice.link, i)}>{choice.option}</button>
+                <button key={i} onClick={() => onSelect(choice.link, i)}>{choice.option}</button>
             )
         } else {
-            return <button onClick={() => props.onSelect(chapter.link)}>Next &gt;</button>
+            return <button onClick={() => onSelect(chapter.link)}>Next &gt;</button>
         }
     }
 
@@ -48,7 +49,7 @@ export default function CurrentChapter(props: ChapterProps) {
             <ReactMarkdown>{getText(textProgress)}</ReactMarkdown>
         </div>
         <div className={`choices ${showChoices && 'visible'}`}>
-            {ActiveChoices(props.chapter)}
+            {ActiveChoices(chapter)}
         </div>
     </div>
 }
