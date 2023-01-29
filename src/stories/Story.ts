@@ -5,7 +5,8 @@ export type Chapter = {
     choices?: {
         option: string,
         link: string,
-    }[]
+    }[],
+    ending?: boolean;
 }
 
 export type Story = {

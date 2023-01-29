@@ -54,7 +54,8 @@ const demo: Story = {
         prose: "Ready?"
     },
     {
-        prose: "Then we'll begin."
+        prose: "Then we'll begin.",
+        ending: true
     }
 ]
 };

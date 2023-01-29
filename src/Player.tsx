@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import CurrentChapter from "./CurrentChapter";
 import LockedChapter, { HistoryItem } from "./LockedChapter";
 import { Story } from "./stories/Story";
+import "./Player.css";
 
 interface PlayerProps {
     story: Story
@@ -37,7 +38,7 @@ export default function Player(props: PlayerProps) {
         current.scrollTop = current.scrollHeight;
     }
 
-    return <div ref={containerElement} style={{scrollBehavior: 'smooth', height: '100vh', overflowY: 'auto'}}>
+    return <div ref={containerElement} className="player">
         {history.map((historyItem, i) => <div key={i}>{LockedChapter(historyItem)}</div>)}
         <CurrentChapter key={current} chapter={props.story.chapters[current]}
             onUpdate={handleUpdate}

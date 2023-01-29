@@ -11,3 +11,7 @@ body {
   padding: 1rem;
 }
 
+.endmark::after {
+  content: url('endmark.svg');
+  margin-left: 0.2em;
+}

@@ -35,6 +35,9 @@ export default function CurrentChapter(props: ChapterProps) {
     }, [textProgress, getText, words, onUpdate]);
 
     function ActiveChoices(chapter: Chapter) {
+        if (chapter.ending) {
+            return <div className="endmark" />
+        }
         if (chapter.choices) {
             return chapter.choices.map((choice, i) =>
                 <button key={i} onClick={() => onSelect(choice.link, i)}>{choice.option}</button>
