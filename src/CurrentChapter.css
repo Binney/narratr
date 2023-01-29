@@ -15,11 +15,19 @@
     text-align: initial;
     font-family: 'Barlow', sans-serif;
     padding: 0 0 1rem;
-    font-size: 1rem;
+    font-size: 1em;
     cursor: pointer;
     font-style: italic;
 }
 
 .choices button:hover, .choices button:focus {
+    color: #ed7d98;
+}
+
+.finish-endmark {
+    color: #d7385e;
+}
+
+.finish-endmark:hover, .finish-endmark:focus {
     color: #ed7d98;
 }

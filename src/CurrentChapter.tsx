@@ -37,7 +37,7 @@ export default function CurrentChapter(props: ChapterProps) {
 
     function ActiveChoices(chapter: Chapter) {
         if (chapter.ending) {
-            return <Link to='/comingsoon' className="endmark" />
+            return <Link to='/comingsoon' className="endmark finish-endmark" />
         }
         if (chapter.choices) {
             return chapter.choices.map((choice, i) =>
