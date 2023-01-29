@@ -1,7 +1,9 @@
-.current-chapter {
-    min-height: 5rem;
+.choices {
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
-.current-section {
-    /* padding-bottom: 5rem; */
+.choices.visible {
+    visibility: visible;
 }

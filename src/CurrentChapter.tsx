@@ -35,15 +35,11 @@ export default function CurrentChapter(props: ChapterProps) {
 
     function ActiveChoices(chapter: Chapter) {
         if (chapter.choices) {
-            return <div>
-                {chapter.choices.map((choice, i) => {
-                    return <button key={i} onClick={() => props.onSelect(choice.link, i)}>{choice.option}</button>
-                })}
-            </div>
+            return chapter.choices.map((choice, i) =>
+                <button key={i} onClick={() => props.onSelect(choice.link, i)}>{choice.option}</button>
+            )
         } else {
-            return <div>
-                <button onClick={() => props.onSelect(chapter.link)}>Next &gt;</button>
-            </div>
+            return <button onClick={() => props.onSelect(chapter.link)}>Next &gt;</button>
         }
     }
 
@@ -51,7 +47,8 @@ export default function CurrentChapter(props: ChapterProps) {
         <div className="current-section">
             <ReactMarkdown>{getText(textProgress)}</ReactMarkdown>
         </div>
-        {showChoices && ActiveChoices(props.chapter)}
+        <div className={`choices ${showChoices && 'visible'}`}>
+            {ActiveChoices(props.chapter)}
+        </div>
     </div>
-
 }
