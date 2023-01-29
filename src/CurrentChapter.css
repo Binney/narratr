@@ -7,3 +7,19 @@
 .choices.visible {
     visibility: visible;
 }
+
+.choices button {
+    border: none;
+    color: #d7385e;
+    background: transparent;
+    text-align: initial;
+    font-family: 'Barlow', sans-serif;
+    padding: 0 0 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    font-style: italic;
+}
+
+.choices button:hover, .choices button:focus {
+    color: #ed7d98;
+}
