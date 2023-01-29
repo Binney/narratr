@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { Chapter } from "./stories/Story";
+import { Link } from 'react-router-dom';
 import './CurrentChapter.css';
+import { Chapter } from "./stories/Story";
 
 interface ChapterProps {
     chapter: Chapter;
@@ -36,7 +37,7 @@ export default function CurrentChapter(props: ChapterProps) {
 
     function ActiveChoices(chapter: Chapter) {
         if (chapter.ending) {
-            return <div className="endmark" />
+            return <Link to='/comingsoon' className="endmark" />
         }
         if (chapter.choices) {
             return chapter.choices.map((choice, i) =>

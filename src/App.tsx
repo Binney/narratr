@@ -7,11 +7,11 @@ import demo from './stories/Demo';
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Splash />
+        element: <Player story={demo} />
     },
     {
-        path: "/intro",
-        element: <Player story={demo} />
+        path: "/comingsoon",
+        element: <Splash />
     }
 ])
 
