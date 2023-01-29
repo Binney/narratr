@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useRef, useState } from "react";
 import CurrentChapter from "./CurrentChapter";
 import LockedChapter, { HistoryItem } from "./LockedChapter";
 import { Story } from "./stories/Story";
@@ -20,6 +20,8 @@ export default (props: PlayerProps) => {
     const [current, setCurrent] = useState(0);
     const [history, setHistory] = useState<HistoryItem[]>([]);
 
+    const containerElement = useRef<HTMLDivElement>(null);
+
     const handleSelect = (anchor?: string, choice?: number) => {
         history.push({ chapter: props.story.chapters[current], choice });
         setHistory(history);
@@ -28,8 +30,17 @@ export default (props: PlayerProps) => {
         setCurrent(next);
     };
 
-    return <div>
+    const handleUpdate = () => {
+        const { current } = containerElement;
+        if (!current) return;
+        console.log(`${current.scrollTop} vs ${current?.scrollHeight}`);
+        current.scrollTop = current.scrollHeight;
+    }
+
+    return <div ref={containerElement} style={{scrollBehavior: 'smooth', height: '100vh', overflowY: 'auto'}}>
         {history.map((historyItem, i) => <div key={i}>{LockedChapter(historyItem)}</div>)}
-        <CurrentChapter key={current} chapter={props.story.chapters[current]} onSelect={handleSelect}></CurrentChapter>
+        <CurrentChapter key={current} chapter={props.story.chapters[current]}
+            onUpdate={handleUpdate}
+            onSelect={handleSelect}></CurrentChapter>
     </div>
 }

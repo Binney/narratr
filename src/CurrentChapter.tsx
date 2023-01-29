@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Chapter } from "./stories/Story";
+import './CurrentChapter.css';
 
 interface ChapterProps {
-    chapter: Chapter,
-    onSelect: (anchor?: string, next?: number) => void
+    chapter: Chapter;
+    onSelect: (anchor?: string, next?: number) => void;
+    onUpdate: () => void;
 }
 
 const timeoutNormal = 50;
@@ -27,6 +29,7 @@ export default function CurrentChapter(props: ChapterProps) {
             } else {
                 setTextProgress(textProgress + 1);
             }
+            props.onUpdate();
         }, hasPause ? timeoutBreath : timeoutNormal);
     }, [textProgress, getText, words]);
 
@@ -44,8 +47,10 @@ export default function CurrentChapter(props: ChapterProps) {
         }
     }
 
-    return <div>
-        <ReactMarkdown>{getText(textProgress)}</ReactMarkdown>
+    return <div className="current-chapter">
+        <div className="current-section">
+            <ReactMarkdown>{getText(textProgress)}</ReactMarkdown>
+        </div>
         {showChoices && ActiveChoices(props.chapter)}
     </div>
 
