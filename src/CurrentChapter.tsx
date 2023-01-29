@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { Chapter } from "./stories/Story";
 
 interface ChapterProps {
@@ -44,7 +45,7 @@ export default function CurrentChapter(props: ChapterProps) {
     }
 
     return <div>
-        {getText(textProgress)}
+        <ReactMarkdown>{getText(textProgress)}</ReactMarkdown>
         {showChoices && ActiveChoices(props.chapter)}
     </div>
 
