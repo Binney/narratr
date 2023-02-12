@@ -3,6 +3,7 @@ import CurrentChapter from "./CurrentChapter";
 import LockedChapter, { HistoryItem } from "./LockedChapter";
 import { Story } from "./stories/Story";
 import "./Player.css";
+import { useLoaderData } from "react-router-dom";
 
 interface PlayerProps {
     story: Story
