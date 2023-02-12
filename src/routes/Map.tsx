@@ -3,9 +3,9 @@ import { useState } from "react"
 export default function Splash() {
     const [location, setLocation] = useState('');
     const [error, setError] = useState('');
-    navigator.geolocation.getCurrentPosition((position) => {
+    navigator.geolocation.watchPosition((position) => {
         console.log("Setting to " + JSON.stringify(position));
-        setLocation(JSON.stringify(position.coords));
+        setLocation(JSON.stringify({ "latitude": position.coords.latitude, "longitude": position.coords.longitude }));
     }, (err) => {
         console.log(JSON.stringify(err));
         setError(JSON.stringify(err));
