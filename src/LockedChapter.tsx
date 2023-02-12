@@ -1,23 +1,23 @@
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { Chapter } from "./stories/Story"
+import { Line } from "./stories/Story"
 import "./LockedChapter.css";
 
 export interface HistoryItem {
-    chapter: Chapter,
+    line: Line,
     choice?: number
 }
 
 export default function LockedChapter(props: HistoryItem) {
     function LockedChoice(choice: number) {
-        if (!props.chapter.choices) {
+        if (!props.line.choices) {
             return; // nothing
         } else {
-            return <p className="locked-choice">{props.chapter.choices[choice].option}</p>
+            return <p className="locked-choice">{props.line.choices[choice].option}</p>
         }
     }
 
     return <div>
-        <ReactMarkdown>{props.chapter.prose}</ReactMarkdown>
+        <ReactMarkdown>{props.line.prose}</ReactMarkdown>
         {LockedChoice(props.choice || 0)}
     </div>
 }

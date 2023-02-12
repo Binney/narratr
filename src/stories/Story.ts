@@ -1,4 +1,4 @@
-export type Chapter = {
+export type Line = {
     anchor?: string,
     prose: string,
     link?: string,
@@ -9,7 +9,11 @@ export type Chapter = {
     ending?: boolean;
 }
 
+export type Conversation = {
+    lines: Line[],
+}
+
 export type Story = {
     title: string,
-    chapters: Chapter[],
+    chapters: Conversation[],
 }

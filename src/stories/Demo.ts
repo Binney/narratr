@@ -2,11 +2,14 @@ import { Story } from "./Story";
 
 const demo: Story = {
     title: 'Demo',
-    chapters: [
-        {
-            prose: 'Hello, this is a story',
-        }
-    ]
+    chapters: [{
+        lines: [
+            {
+                prose: 'Hello, this is a story',
+                ending: true,
+            }        
+        ]
+    }]
 }
 
 export default demo;

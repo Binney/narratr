@@ -2,23 +2,24 @@ import { useCallback, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Link } from 'react-router-dom';
 import './CurrentChapter.css';
-import { Chapter } from "./stories/Story";
+import { Line } from "./stories/Story";
 
-interface ChapterProps {
-    chapter: Chapter;
+interface LineProps {
+    line: Line;
     onSelect: (anchor?: string, next?: number) => void;
     onUpdate: () => void;
+    onComplete: () => void;
 }
 
 const timeoutNormal = 50;
 const timeoutBreath = 300;
 
-export default function CurrentChapter(props: ChapterProps) {
+export default function CurrentChapter(props: LineProps) {
     const [textProgress, setTextProgress] = useState(0);
     const [showChoices, setShowChoices] = useState(false);
-    const { chapter, onSelect, onUpdate } = props;
+    const { line, onSelect, onUpdate, onComplete } = props;
 
-    const words = chapter.prose.split(' ');
+    const words = line.prose.split(' ');
     const getText = useCallback((progress: number) => {
         return words.slice(0, progress).join(' ');
     }, [words]);
@@ -35,16 +36,16 @@ export default function CurrentChapter(props: ChapterProps) {
         }, hasPause ? timeoutBreath : timeoutNormal);
     }, [textProgress, getText, words, onUpdate]);
 
-    function ActiveChoices(chapter: Chapter) {
-        if (chapter.ending) {
-            return <Link to='/comingsoon' className="endmark finish-endmark" />
+    function ActiveChoices(line: Line) {
+        if (line.ending) {
+            return <button onClick={() => onComplete()}>o</button>
         }
-        if (chapter.choices) {
-            return chapter.choices.map((choice, i) =>
+        if (line.choices) {
+            return line.choices.map((choice, i) =>
                 <button key={i} onClick={() => onSelect(choice.link, i)}>{choice.option}</button>
             )
         } else {
-            return <button onClick={() => onSelect(chapter.link)}>Next &gt;</button>
+            return <button onClick={() => onSelect(line.link)}>Next &gt;</button>
         }
     }
 
@@ -53,7 +54,7 @@ export default function CurrentChapter(props: ChapterProps) {
             <ReactMarkdown>{getText(textProgress)}</ReactMarkdown>
         </div>
         <div className={`choices ${showChoices && 'visible'}`}>
-            {ActiveChoices(chapter)}
+            {ActiveChoices(line)}
         </div>
     </div>
 }
