@@ -1,6 +1,6 @@
 import { Story } from "./Story";
 
-const demo: Story = {
+const preview: Story = {
     title: "Demo story",
     chapters: [{
         anchor: "beginning",
@@ -60,4 +60,4 @@ const demo: Story = {
 ]
 };
 
-export default demo;
+export default preview;

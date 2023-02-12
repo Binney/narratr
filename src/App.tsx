@@ -3,12 +3,12 @@ import './App.css';
 import Player from './Player';
 import Splash from './routes/Splash';
 import Map from './routes/Map';
-import demo from './stories/Demo';
+import preview from './stories/Preview';
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Player story={demo} />
+        element: <Player story={preview} />
     },
     {
         path: "/comingsoon",
