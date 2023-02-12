@@ -2,7 +2,7 @@ import { Story } from "./Story";
 
 const preview: Story = {
     title: "Demo story",
-    chapters: [{
+    conversations: [{
         lines: [{
             anchor: "beginning",
             prose: "Well, hi.",

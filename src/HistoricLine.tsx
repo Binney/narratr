@@ -1,13 +1,13 @@
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Line } from "./stories/Story"
-import "./LockedChapter.css";
+import "./HistoricLine.css";
 
 export interface HistoryItem {
     line: Line,
     choice?: number
 }
 
-export default function LockedChapter(props: HistoryItem) {
+export default function HistoricLine(props: HistoryItem) {
     function LockedChoice(choice: number) {
         if (!props.line.choices) {
             return; // nothing

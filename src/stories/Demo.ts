@@ -2,7 +2,7 @@ import { Story } from "./Story";
 
 const demo: Story = {
     title: 'Demo',
-    chapters: [{
+    conversations: [{
         lines: [
             {
                 prose: 'Hello, this is a story',

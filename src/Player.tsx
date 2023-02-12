@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import CurrentChapter from "./CurrentChapter";
-import LockedChapter, { HistoryItem } from "./LockedChapter";
+import CurrentLine from "./CurrentLine";
+import HistoricLine, { HistoryItem } from "./HistoricLine";
 import { Story } from "./stories/Story";
 import "./Player.css";
 import ConversationStarter from "./ConversationStarter";
@@ -11,25 +11,25 @@ interface PlayerProps {
 
 export default function Player(props: PlayerProps) {
     const [line, setLine] = useState(0);
-    const [chapter, setChapter] = useState(0);
+    const [conversation, setConversation] = useState(0);
     const [history, setHistory] = useState<HistoryItem[]>([]);
 
     const containerElement = useRef<HTMLDivElement>(null);
 
-    function findChapterFromAnchor(story: Story, anchor: string): number {
-        for (var i = 0; i < story.chapters.length; i++) {
-            if (story.chapters[chapter].lines[i].anchor === anchor) {
+    function findLineFromAnchor(story: Story, anchor: string): number {
+        for (var i = 0; i < story.conversations.length; i++) {
+            if (story.conversations[conversation].lines[i].anchor === anchor) {
                 return i;
             }
         }
-        throw new Error(`Couldn't find chapter with anchor ${anchor}`);
+        throw new Error(`Couldn't find line with anchor ${anchor}`);
     }
 
     function handleSelect(anchor?: string, choice?: number) {
-        history.push({ line: props.story.chapters[chapter].lines[line], choice });
+        history.push({ line: props.story.conversations[conversation].lines[line], choice });
         setHistory(history);
 
-        const next = anchor ? findChapterFromAnchor(props.story, anchor) : line + 1;
+        const next = anchor ? findLineFromAnchor(props.story, anchor) : line + 1;
         setLine(next);
     };
 
@@ -43,18 +43,18 @@ export default function Player(props: PlayerProps) {
     function handleComplete() {
         console.log('Well, it was a boring conversation anyway');
         handleSelect();
-        setChapter(-1);
+        setConversation(-1);
     };
 
     return <div ref={containerElement} className="player">
-        {history.map((historyItem, i) => <div key={i}>{LockedChapter(historyItem)}</div>)}
-        {chapter >= 0 &&
-        <CurrentChapter key={line} line={props.story.chapters[chapter].lines[line]}
+        {history.map((historyItem, i) => <div key={i}>{HistoricLine(historyItem)}</div>)}
+        {conversation >= 0 &&
+        <CurrentLine key={line} line={props.story.conversations[conversation].lines[line]}
             onUpdate={handleUpdate}
             onSelect={handleSelect}
-            onComplete={handleComplete}></CurrentChapter>
+            onComplete={handleComplete}></CurrentLine>
         }
-        {chapter === -1 &&
+        {conversation === -1 &&
             <ConversationStarter />
         }
     </div>

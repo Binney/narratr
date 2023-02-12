@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { Link } from 'react-router-dom';
-import './CurrentChapter.css';
+import './CurrentLine.css';
 import { Line } from "./stories/Story";
 
 interface LineProps {
@@ -14,7 +13,7 @@ interface LineProps {
 const timeoutNormal = 50;
 const timeoutBreath = 300;
 
-export default function CurrentChapter(props: LineProps) {
+export default function CurrentLine(props: LineProps) {
     const [textProgress, setTextProgress] = useState(0);
     const [showChoices, setShowChoices] = useState(false);
     const { line, onSelect, onUpdate, onComplete } = props;
@@ -49,7 +48,7 @@ export default function CurrentChapter(props: LineProps) {
         }
     }
 
-    return <div className="current-chapter">
+    return <div className="current-line">
         <div className="current-section">
             <ReactMarkdown>{getText(textProgress)}</ReactMarkdown>
         </div>

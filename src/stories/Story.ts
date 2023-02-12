@@ -15,5 +15,5 @@ export type Conversation = {
 
 export type Story = {
     title: string,
-    chapters: Conversation[],
+    conversations: Conversation[],
 }
