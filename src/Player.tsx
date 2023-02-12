@@ -3,6 +3,7 @@ import CurrentChapter from "./CurrentChapter";
 import LockedChapter, { HistoryItem } from "./LockedChapter";
 import { Story } from "./stories/Story";
 import "./Player.css";
+import ConversationStarter from "./ConversationStarter";
 
 interface PlayerProps {
     story: Story
@@ -41,14 +42,20 @@ export default function Player(props: PlayerProps) {
 
     function handleComplete() {
         console.log('Well, it was a boring conversation anyway');
+        handleSelect();
+        setChapter(-1);
     };
 
     return <div ref={containerElement} className="player">
         {history.map((historyItem, i) => <div key={i}>{LockedChapter(historyItem)}</div>)}
+        {chapter >= 0 &&
         <CurrentChapter key={line} line={props.story.chapters[chapter].lines[line]}
             onUpdate={handleUpdate}
             onSelect={handleSelect}
             onComplete={handleComplete}></CurrentChapter>
-        { /* TODO section to set conversation */}
+        }
+        {chapter === -1 &&
+            <ConversationStarter />
+        }
     </div>
 }
