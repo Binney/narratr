@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.css';
 import Player from './Player';
 import Splash from './routes/Splash';
+import Map from './routes/Map';
 import demo from './stories/Demo';
 
 const router = createBrowserRouter([
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
     {
         path: "/comingsoon",
         element: <Splash />
+    },
+    {
+        path: "/map",
+        element: <Map />
     }
 ])
 
