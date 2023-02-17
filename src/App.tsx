@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/map",
-        element: <Map />
+        element: <Map eastEdge={-0.14145} westEdge={-0.14638} northEdge={51.5642} southEdge={51.5602} />
     },
     {
         // TODO better routing by slug
