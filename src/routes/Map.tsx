@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { Stage, Circle, Layer, Rect } from "react-konva";
+import { Stage, Circle, Layer, Rect, Arrow } from "react-konva";
+import testMap from './stories/maps/testMap.jpg';
 
 interface MapProps {
     eastEdge: number;
@@ -7,6 +8,12 @@ interface MapProps {
     northEdge: number;
     southEdge: number;
 }
+
+interface arrowProps {
+    towardsX: number;
+    towardsY: number;
+}
+
 
 export default function Map(props: MapProps) {
     const actualWidth = 800;
@@ -19,6 +26,25 @@ export default function Map(props: MapProps) {
     const [error, setError] = useState('');
     const [lat, setLat] = useState(51.5628);
     const [lon, setLon] = useState(-0.1445);
+
+    function OffscreenArrow({ towardsX, towardsY }: arrowProps) {
+        if (towardsX > 0 && towardsY > 0 && towardsX < actualWidth && towardsY < actualHeight) {
+            return <></>;
+        }
+        let deltaX = towardsX - (actualWidth / 2);
+        let deltaY = towardsY - (actualHeight / 2);
+        let scale = Math.sqrt(deltaX * deltaX + deltaY * deltaY) / 100;
+        return <Arrow
+            x={actualWidth / 2}
+            y={actualHeight / 2}
+            points={[0, 0, deltaX / scale, deltaY / scale]}
+            pointerLength={20}
+            pointerWidth={20}
+            fill='black'
+            stroke='black'
+            strokeWidth={30}
+        ></Arrow>
+    }
 
     function normalise(pos: number, min: number, mapSize: number, actualSize: number): number {
         return (pos - min) * actualSize / mapSize;
@@ -42,8 +68,11 @@ export default function Map(props: MapProps) {
                 <Circle x={normalise(lon, props.westEdge, mapWidth, actualWidth)}
                     y={actualHeight - normalise(lat, props.southEdge, mapHeight, actualHeight)}
                     fill={"red"} stroke={'black'} radius={10} strokeWidth={2}></Circle>
-            </Layer>
+                    <OffscreenArrow towardsX={normalise(lon, props.westEdge, mapWidth, actualWidth)}
+                        towardsY={actualHeight - normalise(lat, props.southEdge, mapHeight, actualHeight)} />
+                </Layer>
         </Stage>
+
         <p>{location}</p>
         <p>👆 Yep, that's your location alright</p>
         <p>{error}</p>
