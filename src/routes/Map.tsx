@@ -33,11 +33,13 @@ export default function Map(props: MapProps) {
         }
         let deltaX = towardsX - (actualWidth / 2);
         let deltaY = towardsY - (actualHeight / 2);
-        let scale = Math.sqrt(deltaX * deltaX + deltaY * deltaY) / 100;
+        const edgeMargin = 100;
+        let scale = Math.sqrt(deltaX * deltaX + deltaY * deltaY) * 2 / (actualHeight - edgeMargin);
+        const arrowShortness = 0.4;
         return <Arrow
             x={actualWidth / 2}
             y={actualHeight / 2}
-            points={[0, 0, deltaX / scale, deltaY / scale]}
+            points={[arrowShortness * deltaX / scale, arrowShortness * deltaY / scale, deltaX / scale, deltaY / scale]}
             pointerLength={20}
             pointerWidth={20}
             fill='black'
