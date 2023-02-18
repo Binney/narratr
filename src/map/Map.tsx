@@ -1,6 +1,6 @@
 import { Vector2d } from "konva/lib/types";
 import { useState } from "react"
-import { Stage, Circle, Layer, Rect, Arrow, Image, Text } from "react-konva";
+import { Stage, Circle, Layer, Rect, Arrow, Image } from "react-konva";
 import useImage from "use-image";
 import DebugTooltip from "./DebugTooltip";
 import { metresPerDegreeLon, SpaceProps } from "./geography";
