@@ -1,5 +1,5 @@
 import { Line } from "react-konva"
-import { SpaceProps } from "./geography"
+import { metresPerDegreeLon, SpaceProps } from "./geography"
 
 interface GridlinesProps extends SpaceProps {
     canvasWidth: number;
@@ -13,7 +13,6 @@ export default function Gridlines(props: GridlinesProps) {
     const mapWidthDegrees = props.eastEdge - props.westEdge;
 
     const lineSpacingMetres = 100;
-    const metresPerDegreeLon = 6371 * 1000 * 2 * Math.PI / 360;
     const pxPerDegreeLon = props.canvasWidth / mapWidthDegrees;
     const pxSpacing = lineSpacingMetres * pxPerDegreeLon / metresPerDegreeLon;
 

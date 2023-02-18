@@ -1,7 +1,7 @@
 import { Vector2d } from "konva/lib/types";
 import { useState } from "react"
 import { Stage, Circle, Layer, Rect, Arrow } from "react-konva";
-import { SpaceProps } from "./geography";
+import { metresPerDegreeLon, SpaceProps } from "./geography";
 import Gridlines from "./Gridlines";
 
 interface MapProps extends SpaceProps {
@@ -16,13 +16,16 @@ interface arrowProps {
 
 
 export default function Map(props: MapProps) {
-    const actualWidth = 800;
-    const actualHeight = 500;
-    const viewportWidth = 700;
+    const scale = metresPerDegreeLon; // 1px = 1m
+
+    const viewportWidth = 375;
     const viewportHeight = 400;
 
     const mapWidth = props.eastEdge - props.westEdge;
     const mapHeight = props.northEdge - props.southEdge;
+
+    const actualWidth = mapWidth * scale;
+    const actualHeight = mapHeight * scale;
 
     const [location, setLocation] = useState('');
     const [error, setError] = useState('');
@@ -30,6 +33,7 @@ export default function Map(props: MapProps) {
     const [lon, setLon] = useState(-0.1445);
 
     function OffscreenArrow({ towardsX, towardsY }: arrowProps) {
+        // TODO stick arrow on separate Stage and make it not pan
         if (towardsX > 0 && towardsY > 0 && towardsX < actualWidth && towardsY < actualHeight) {
             return <></>;
         }
@@ -65,16 +69,15 @@ export default function Map(props: MapProps) {
     function lockToBounds(pos: Vector2d): Vector2d {
         let resX = pos.x;
         let resY = pos.y;
+
         if (pos.x > 0) {
             resX = 0;
-        }
-        if (pos.x < viewportWidth - actualWidth) {
+        } else if (pos.x < viewportWidth - actualWidth) {
             resX = viewportWidth - actualWidth;
         }
         if (pos.y > 0) {
             resY = 0;
-        }
-        if (pos.y < viewportHeight - actualHeight) {
+        } else if (pos.y < viewportHeight - actualHeight) {
             resY = viewportHeight - actualHeight;
         }
 
