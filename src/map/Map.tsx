@@ -30,7 +30,6 @@ export default function Map(props: MapProps) {
     const actualWidth = mapWidth * scale;
     const actualHeight = mapHeight * scale;
 
-    const [location, setLocation] = useState('');
     const [error, setError] = useState('');
     const [lat, setLat] = useState(51.5628);
     const [lon, setLon] = useState(-0.1445);
@@ -131,7 +130,6 @@ export default function Map(props: MapProps) {
     navigator.geolocation.watchPosition((position) => {
         setLat(position.coords.latitude);
         setLon(position.coords.longitude);
-        setLocation(`Longitude: ${position.coords.longitude}, latitude: ${position.coords.latitude}`);
     }, (err) => {
         console.log(JSON.stringify(err));
         setError(JSON.stringify(err));
