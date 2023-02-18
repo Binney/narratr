@@ -1,8 +1,7 @@
 import { useState } from "react"
-import { Stage, Circle, Layer, Rect, Arrow, Line } from "react-konva";
+import { Stage, Circle, Layer, Rect, Arrow } from "react-konva";
 import { SpaceProps } from "./geography";
 import Gridlines from "./Gridlines";
-import testMap from './stories/maps/testMap.jpg';
 
 interface MapProps extends SpaceProps {
     // TODO background image
@@ -70,7 +69,7 @@ export default function Map(props: MapProps) {
         setError(JSON.stringify(err));
     })
     return <div>
-        <Stage width={actualWidth} height={actualHeight}>
+        <Stage width={actualWidth} height={actualHeight} draggable>
             <Layer>
                 <Rect x={0} y={0} width={actualWidth} height={actualHeight} fill={'grey'}></Rect>
                 <Gridlines eastEdge={props.eastEdge} westEdge={props.westEdge}
