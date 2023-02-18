@@ -6,3 +6,4 @@ export interface SpaceProps {
 }
 
 export const metresPerDegreeLon = 6371 * 1000 * 2 * Math.PI / 360;
+export const scale = 1 * metresPerDegreeLon; // 1px = 1m
