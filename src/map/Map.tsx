@@ -2,6 +2,8 @@ import { Vector2d } from "konva/lib/types";
 import { useState } from "react"
 import { Stage, Circle, Layer, Rect, Arrow, Image, Group, Text } from "react-konva";
 import useImage from "use-image";
+import demoMap from "../maps/DemoMap";
+import { Marker } from "../stories/Map";
 import DebugTooltip from "./DebugTooltip";
 import { scale, SpaceProps } from "./geography";
 import Gridlines from "./Gridlines";
@@ -14,12 +16,6 @@ interface MapProps extends SpaceProps {
 interface arrowProps {
     towardsX: number;
     towardsY: number;
-}
-
-interface MapMarkerProps {
-    lat: number;
-    lon: number;
-    name: string;
 }
 
 export default function Map(props: MapProps) {
@@ -98,7 +94,7 @@ export default function Map(props: MapProps) {
         return (((actualHeight - pos) * mapHeight) / actualHeight) + props.southEdge;
     }
 
-    function MapMarker(props: MapMarkerProps) {
+    function MapMarker(props: Marker) {
         return <Group x={lon2x(props.lon)} y={lat2y(props.lat)}>
                 <Circle radius={5} fill='orange'/>
                 <Text text={props.name} x={10} y={-5} />
@@ -153,9 +149,7 @@ export default function Map(props: MapProps) {
                     y={lat2y(lat)}
                     fill={"red"} stroke={'black'} radius={10} strokeWidth={2}></Circle>
                 <DebugTooltip mouseX={mouseX} mouseY={mouseY} textX={y2lat(mouseX)} textY={x2lon(mouseY)} />
-                <MapMarker lat={51.5629} lon={-0.146386} name='Holly Grove' />
-                <MapMarker lat={51.56340} lon={-0.14411} name='Circus' />
-                <MapMarker lat={51.562624} lon={-0.144457} name='Wassail Zone' />
+                {demoMap.markers.map((marker, i) => <MapMarker key={i} lat={marker.lat} lon={marker.lon} name={marker.name} />)}
             </Layer>
         </Stage>
 
