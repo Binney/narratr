@@ -1,3 +1,4 @@
+import { Vector2d } from "konva/lib/types";
 import { useState } from "react"
 import { Stage, Circle, Layer, Rect, Arrow } from "react-konva";
 import { SpaceProps } from "./geography";
@@ -17,6 +18,8 @@ interface arrowProps {
 export default function Map(props: MapProps) {
     const actualWidth = 800;
     const actualHeight = 500;
+    const viewportWidth = 700;
+    const viewportHeight = 400;
 
     const mapWidth = props.eastEdge - props.westEdge;
     const mapHeight = props.northEdge - props.southEdge;
@@ -59,6 +62,28 @@ export default function Map(props: MapProps) {
         return actualHeight - normalise(pos, props.southEdge, mapHeight, actualHeight);
     }
 
+    function lockToBounds(pos: Vector2d): Vector2d {
+        let resX = pos.x;
+        let resY = pos.y;
+        if (pos.x > 0) {
+            resX = 0;
+        }
+        if (pos.x < viewportWidth - actualWidth) {
+            resX = viewportWidth - actualWidth;
+        }
+        if (pos.y > 0) {
+            resY = 0;
+        }
+        if (pos.y < viewportHeight - actualHeight) {
+            resY = viewportHeight - actualHeight;
+        }
+
+        return {
+            x: resX,
+            y: resY
+        };
+    }
+
     navigator.geolocation.watchPosition((position) => {
         console.log("Setting to " + JSON.stringify(position));
         setLat(position.coords.latitude);
@@ -69,7 +94,7 @@ export default function Map(props: MapProps) {
         setError(JSON.stringify(err));
     })
     return <div>
-        <Stage width={actualWidth} height={actualHeight} draggable>
+        <Stage width={viewportWidth} height={viewportHeight} draggable dragBoundFunc={lockToBounds}>
             <Layer>
                 <Rect x={0} y={0} width={actualWidth} height={actualHeight} fill={'grey'}></Rect>
                 <Gridlines eastEdge={props.eastEdge} westEdge={props.westEdge}
