@@ -1,12 +1,12 @@
 import { useState } from "react"
 import { Stage, Circle, Layer, Rect, Arrow, Line } from "react-konva";
+import { SpaceProps } from "./geography";
+import Gridlines from "./Gridlines";
 import testMap from './stories/maps/testMap.jpg';
 
-interface MapProps {
-    eastEdge: number;
-    westEdge: number;
-    northEdge: number;
-    southEdge: number;
+interface MapProps extends SpaceProps {
+    // TODO background image
+    // TODO markers
 }
 
 interface arrowProps {
@@ -73,8 +73,9 @@ export default function Map(props: MapProps) {
         <Stage width={actualWidth} height={actualHeight}>
             <Layer>
                 <Rect x={0} y={0} width={actualWidth} height={actualHeight} fill={'grey'}></Rect>
-                {Array.from({ length: 10 }).map((_, i) => <Line stroke='green' strokeWidth={1} points={[0, i * 100, actualWidth, i * 100]}/>)}
-                {Array.from({ length: 10 }).map((_, i) => <Line stroke='green' strokeWidth={1} points={[i * 100, 0, i * 100, actualHeight]}/>)}
+                <Gridlines eastEdge={props.eastEdge} westEdge={props.westEdge}
+                    northEdge={props.northEdge} southEdge={props.southEdge}
+                    canvasWidth={actualWidth} canvasHeight={actualHeight} />
             </Layer>
             <Layer>
                 <Circle x={normaliseX(lon)}

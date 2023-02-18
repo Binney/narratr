@@ -2,9 +2,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.css';
 import Player from './Player';
 import Splash from './routes/Splash';
-import Map from './routes/Map';
 import preview from './stories/Preview';
 import demo from './stories/Demo';
+import DemoMap from './routes/DemoMap';
 
 const router = createBrowserRouter([
     {
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/map",
-        element: <Map westEdge={-0.14956} eastEdge={-0.13883} northEdge={51.56532} southEdge={51.56107} />
+        element: <DemoMap />
     },
     {
         // TODO better routing by slug
