@@ -19,8 +19,8 @@ interface arrowProps {
 export default function Map(props: MapProps) {
     const scale = metresPerDegreeLon; // 1px = 1m
 
-    const viewportWidth = 375;
-    const viewportHeight = 300;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = 300; // TODO ??
 
     // Scale lines of longitude because they get closer together the closer you get to the North Pole
     const mapWidth = (props.eastEdge - props.westEdge) * props.southEdge / 90;
