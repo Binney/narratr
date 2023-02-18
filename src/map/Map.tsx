@@ -75,7 +75,8 @@ export default function Map(props: MapProps) {
                 <Rect x={0} y={0} width={actualWidth} height={actualHeight} fill={'grey'}></Rect>
                 <Gridlines eastEdge={props.eastEdge} westEdge={props.westEdge}
                     northEdge={props.northEdge} southEdge={props.southEdge}
-                    canvasWidth={actualWidth} canvasHeight={actualHeight} />
+                    canvasWidth={actualWidth} canvasHeight={actualHeight}
+                    colour='green' />
             </Layer>
             <Layer>
                 <Circle x={normaliseX(lon)}
