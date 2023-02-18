@@ -20,7 +20,7 @@ const demoMap: Map = {
             lon: -0.14845057042237847
         },
         {
-            name: 'Croft\'s Down Falls',
+            name: 'Croft\'s Downfall',
             lat: 51.562039242211576,
             lon: -0.14385552074872443
         },

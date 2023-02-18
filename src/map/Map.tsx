@@ -46,7 +46,6 @@ export default function Map(props: MapProps) {
     function updateTapper(e: any) {
         setMouseX(e.evt?.changedTouches[0]?.clientX);
         setMouseY(e.evt?.changedTouches[0]?.clientY);
-        // console.log(e);
     }
 
     const [backgroundImage] = useImage(`/maps/${props.background}.jpg`);
@@ -54,6 +53,8 @@ export default function Map(props: MapProps) {
     function OffscreenArrow({ towardsX, towardsY }: arrowProps) {
         // TODO stick arrow on separate Stage and make it not pan
         // TODO also update arrow on pan and show if you're offscreen, not off map
+        console.log(`Arrow towards (${towardsX}, ${towardsY})`);
+        console.log(`${actualWidth}, ${actualHeight}`);
         if (towardsX > 0 && towardsY > 0 && towardsX < actualWidth && towardsY < actualHeight) {
             return <></>;
         }
@@ -62,16 +63,17 @@ export default function Map(props: MapProps) {
         const edgeMargin = 100;
         let scale = Math.sqrt(deltaX * deltaX + deltaY * deltaY) * 2 / (actualHeight - edgeMargin);
         const arrowShortness = 0.4;
-        return <Arrow
-            x={actualWidth / 2}
-            y={actualHeight / 2}
-            points={[arrowShortness * deltaX / scale, arrowShortness * deltaY / scale, deltaX / scale, deltaY / scale]}
-            pointerLength={20}
-            pointerWidth={20}
-            fill='black'
-            stroke='black'
-            strokeWidth={30}
-        ></Arrow>
+        return <Group x={actualWidth / 2} y={actualHeight / 2}>
+            <Arrow
+                points={[arrowShortness * deltaX / scale, arrowShortness * deltaY / scale, deltaX / scale, deltaY / scale]}
+                pointerLength={20}
+                pointerWidth={20}
+                fill='black'
+                stroke='black'
+                strokeWidth={30}
+            />
+            <Text text="(You're that way)"/>
+        </Group> 
     }
 
     function normalise(pos: number, min: number, mapSize: number, actualSize: number): number {
@@ -96,7 +98,7 @@ export default function Map(props: MapProps) {
 
     function MapMarker(props: Marker) {
         return <Group x={lon2x(props.lon)} y={lat2y(props.lat)}>
-                <Circle radius={5} fill='orange'/>
+                <Circle radius={5} fill='white'/>
                 <Text text={props.name} x={10} y={-5} />
             </Group>
     }
@@ -143,8 +145,8 @@ export default function Map(props: MapProps) {
                     colour='green' />
             </Layer>
             <Layer>
-                <OffscreenArrow towardsX={normalise(lon, props.westEdge, mapWidth, actualWidth)}
-                    towardsY={actualHeight - normalise(lat, props.southEdge, mapHeight, actualHeight)} />
+                <OffscreenArrow towardsX={lon2x(lon)}
+                    towardsY={lat2y(lat)} />
                 <Circle x={lon2x(lon)}
                     y={lat2y(lat)}
                     fill={"red"} stroke={'black'} radius={10} strokeWidth={2}></Circle>
