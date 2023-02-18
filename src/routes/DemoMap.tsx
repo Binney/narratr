@@ -5,5 +5,5 @@ export default function DemoMap() {
         eastEdge={-0.142024}
         northEdge={51.564606}
         southEdge={51.5611356}
-        background='demoMap' />;
+        background='map_demo' />;
 }

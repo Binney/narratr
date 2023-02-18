@@ -8,8 +8,7 @@ body {
 .App {
   background-color: #f8efd4;
   color: #132743;
-  padding: 1rem;
-  min-height: calc(100vh - 2rem);
+  min-height: 100vh;
 }
 
 .endmark::after {

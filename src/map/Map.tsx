@@ -6,8 +6,7 @@ import { metresPerDegreeLon, SpaceProps } from "./geography";
 import Gridlines from "./Gridlines";
 
 interface MapProps extends SpaceProps {
-    // TODO background image
-    // TODO markers
+    // TODO markers[]
     background: string;
 }
 
@@ -20,15 +19,13 @@ interface arrowProps {
 export default function Map(props: MapProps) {
     const scale = metresPerDegreeLon; // 1px = 1m
 
-    const viewportWidth = 400;
+    const viewportWidth = 375;
     const viewportHeight = 300;
 
     // Scale lines of longitude because they get closer together the closer you get to the North Pole
     const mapWidth = (props.eastEdge - props.westEdge) * props.southEdge / 90;
     // ...whereas lines of latitude remain at constant spacing
     const mapHeight = props.northEdge - props.southEdge;
-    console.log(mapWidth);
-    console.log(mapHeight);
 
     const actualWidth = mapWidth * scale;
     const actualHeight = mapHeight * scale;
@@ -38,7 +35,7 @@ export default function Map(props: MapProps) {
     const [lat, setLat] = useState(51.5628);
     const [lon, setLon] = useState(-0.1445);
 
-    const [backgroundImage] = useImage('/maps/map_demo.jpg');
+    const [backgroundImage] = useImage(`/maps/${props.background}.jpg`);
 
     function OffscreenArrow({ towardsX, towardsY }: arrowProps) {
         // TODO stick arrow on separate Stage and make it not pan
@@ -100,7 +97,7 @@ export default function Map(props: MapProps) {
         console.log("Setting to " + JSON.stringify(position));
         setLat(position.coords.latitude);
         setLon(position.coords.longitude);
-        setLocation(JSON.stringify({ "latitude": position.coords.latitude, "longitude": position.coords.longitude }));
+        setLocation(`Latitude: ${position.coords.latitude}, longitude: ${position.coords.longitude}`);
     }, (err) => {
         console.log(JSON.stringify(err));
         setError(JSON.stringify(err));
