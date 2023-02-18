@@ -1,12 +1,14 @@
 import { Vector2d } from "konva/lib/types";
 import { useState } from "react"
-import { Stage, Circle, Layer, Rect, Arrow } from "react-konva";
+import { Stage, Circle, Layer, Rect, Arrow, Image } from "react-konva";
+import useImage from "use-image";
 import { metresPerDegreeLon, SpaceProps } from "./geography";
 import Gridlines from "./Gridlines";
 
 interface MapProps extends SpaceProps {
     // TODO background image
     // TODO markers
+    background: string;
 }
 
 interface arrowProps {
@@ -18,11 +20,15 @@ interface arrowProps {
 export default function Map(props: MapProps) {
     const scale = metresPerDegreeLon; // 1px = 1m
 
-    const viewportWidth = 375;
-    const viewportHeight = 400;
+    const viewportWidth = 400;
+    const viewportHeight = 300;
 
-    const mapWidth = props.eastEdge - props.westEdge;
+    // Scale lines of longitude because they get closer together the closer you get to the North Pole
+    const mapWidth = (props.eastEdge - props.westEdge) * props.southEdge / 90;
+    // ...whereas lines of latitude remain at constant spacing
     const mapHeight = props.northEdge - props.southEdge;
+    console.log(mapWidth);
+    console.log(mapHeight);
 
     const actualWidth = mapWidth * scale;
     const actualHeight = mapHeight * scale;
@@ -32,8 +38,11 @@ export default function Map(props: MapProps) {
     const [lat, setLat] = useState(51.5628);
     const [lon, setLon] = useState(-0.1445);
 
+    const [backgroundImage] = useImage('/maps/map_demo.jpg');
+
     function OffscreenArrow({ towardsX, towardsY }: arrowProps) {
         // TODO stick arrow on separate Stage and make it not pan
+        // TODO also update arrow on pan and show if you're offscreen, not off map
         if (towardsX > 0 && towardsY > 0 && towardsX < actualWidth && towardsY < actualHeight) {
             return <></>;
         }
@@ -100,6 +109,7 @@ export default function Map(props: MapProps) {
         <Stage width={viewportWidth} height={viewportHeight} draggable dragBoundFunc={lockToBounds}>
             <Layer>
                 <Rect x={0} y={0} width={actualWidth} height={actualHeight} fill={'grey'}></Rect>
+                <Image image={backgroundImage} width={actualWidth} height={actualHeight}></Image>
                 <Gridlines eastEdge={props.eastEdge} westEdge={props.westEdge}
                     northEdge={props.northEdge} southEdge={props.southEdge}
                     canvasWidth={actualWidth} canvasHeight={actualHeight}
