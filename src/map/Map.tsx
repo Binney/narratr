@@ -1,9 +1,9 @@
 import { Vector2d } from "konva/lib/types";
 import { useState } from "react"
-import { Stage, Circle, Layer, Rect, Arrow, Image } from "react-konva";
+import { Stage, Circle, Layer, Rect, Arrow, Image, Group, Text } from "react-konva";
 import useImage from "use-image";
 import DebugTooltip from "./DebugTooltip";
-import { metresPerDegreeLon, SpaceProps } from "./geography";
+import { scale, SpaceProps } from "./geography";
 import Gridlines from "./Gridlines";
 
 interface MapProps extends SpaceProps {
@@ -16,10 +16,13 @@ interface arrowProps {
     towardsY: number;
 }
 
+interface MapMarkerProps {
+    lat: number;
+    lon: number;
+    name: string;
+}
 
 export default function Map(props: MapProps) {
-    const scale = metresPerDegreeLon; // 1px = 1m
-
     const viewportWidth = window.innerWidth;
     const viewportHeight = 300; // TODO ??
 
@@ -79,20 +82,27 @@ export default function Map(props: MapProps) {
         return (pos - min) * actualSize / mapSize;
     }
 
-    function normaliseX(pos: number) {
-        return normalise(pos, props.westEdge, mapWidth, actualWidth);
+    function lon2x(pos: number) {
+        return normalise(pos, props.westEdge, mapWidth, actualWidth) * props.southEdge / 90;
     }
 
-    function normaliseY(pos: number) {
+    function lat2y(pos: number) {
         return actualHeight - normalise(pos, props.southEdge, mapHeight, actualHeight);
     }
 
-    function denormaliseX(pos: number) {
+    function y2lat(pos: number) { // only 90s kids will remember
         return ((pos * mapWidth) / actualWidth) + props.westEdge;
     }
 
-    function denormaliseY(pos: number) {
+    function x2lon(pos: number) {
         return (((actualHeight - pos) * mapHeight) / actualHeight) + props.southEdge;
+    }
+
+    function MapMarker(props: MapMarkerProps) {
+        return <Group x={lon2x(props.lon)} y={lat2y(props.lat)}>
+                <Circle radius={5} fill='orange'/>
+                <Text text={props.name} x={10} y={-5} />
+            </Group>
     }
 
     function lockToBounds(pos: Vector2d): Vector2d {
@@ -117,10 +127,9 @@ export default function Map(props: MapProps) {
     }
 
     navigator.geolocation.watchPosition((position) => {
-        console.log("Setting to " + JSON.stringify(position));
         setLat(position.coords.latitude);
         setLon(position.coords.longitude);
-        setLocation(`Latitude: ${position.coords.latitude}, longitude: ${position.coords.longitude}`);
+        setLocation(`Longitude: ${position.coords.longitude}, latitude: ${position.coords.latitude}`);
     }, (err) => {
         console.log(JSON.stringify(err));
         setError(JSON.stringify(err));
@@ -129,6 +138,7 @@ export default function Map(props: MapProps) {
         {/* TODO this makes gridlines update on every mousemove, fix */}
         <Stage onMouseMove={updateTracker} onTap={updateTapper} width={viewportWidth} height={viewportHeight} draggable dragBoundFunc={lockToBounds}>
             <Layer>
+                {/* TODO center on starting point, not (0, 0) */}
                 <Rect x={0} y={0} width={actualWidth} height={actualHeight} fill={'grey'}></Rect>
                 <Image image={backgroundImage} width={actualWidth} height={actualHeight}></Image>
                 <Gridlines eastEdge={props.eastEdge} westEdge={props.westEdge}
@@ -139,10 +149,13 @@ export default function Map(props: MapProps) {
             <Layer>
                 <OffscreenArrow towardsX={normalise(lon, props.westEdge, mapWidth, actualWidth)}
                     towardsY={actualHeight - normalise(lat, props.southEdge, mapHeight, actualHeight)} />
-                <Circle x={normaliseX(lon)}
-                    y={normaliseY(lat)}
+                <Circle x={lon2x(lon)}
+                    y={lat2y(lat)}
                     fill={"red"} stroke={'black'} radius={10} strokeWidth={2}></Circle>
-                <DebugTooltip mouseX={mouseX} mouseY={mouseY} textX={denormaliseX(mouseX)} textY={denormaliseY(mouseY)} />
+                <DebugTooltip mouseX={mouseX} mouseY={mouseY} textX={y2lat(mouseX)} textY={x2lon(mouseY)} />
+                <MapMarker lat={51.5629} lon={-0.146386} name='Holly Grove' />
+                <MapMarker lat={51.56340} lon={-0.14411} name='Circus' />
+                <MapMarker lat={51.562624} lon={-0.144457} name='Wassail Zone' />
             </Layer>
         </Stage>
 
