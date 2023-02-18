@@ -5,7 +5,7 @@ import useImage from "use-image";
 import demoMap from "../maps/DemoMap";
 import { Marker } from "../stories/Map";
 import DebugTooltip from "./DebugTooltip";
-import { scale, SpaceProps } from "./geography";
+import { haversine, scale, SpaceProps } from "./geography";
 import Gridlines from "./Gridlines";
 
 interface MapProps extends SpaceProps {
@@ -63,16 +63,20 @@ export default function Map(props: MapProps) {
         const edgeMargin = 100;
         let scale = Math.sqrt(deltaX * deltaX + deltaY * deltaY) * 2 / (actualHeight - edgeMargin);
         const arrowShortness = 0.4;
+
+        const distanceMetres = Math.round(haversine(lat, lon, 51.5628, -0.1445));
+        const distanceParsed = distanceMetres > 2000 ? `${Math.round(distanceMetres / 1000)}km` : `${distanceMetres}m`;
         return <Group x={actualWidth / 2} y={actualHeight / 2}>
             <Arrow
                 points={[arrowShortness * deltaX / scale, arrowShortness * deltaY / scale, deltaX / scale, deltaY / scale]}
                 pointerLength={20}
                 pointerWidth={20}
-                fill='black'
-                stroke='black'
+                fill='purple'
+                stroke='purple'
                 strokeWidth={30}
             />
-            <Text text="(You're that way)"/>
+            <Text x={arrowShortness * deltaX / scale} y={arrowShortness * deltaY / scale}
+                text={`(You're ${distanceParsed} that way)`} fontSize={15} fill='purple' />
         </Group> 
     }
 
@@ -155,8 +159,9 @@ export default function Map(props: MapProps) {
             </Layer>
         </Stage>
 
-        <p>{location}</p>
-        <p>👆 Yep, that's your location alright</p>
-        <p>{error}</p>
+        <div className="container">
+            <p>Story goes here</p>
+            <p>{ error && `Sorry, I couldn't find your location. The error was: ${error}`}</p>
+        </div>
     </div>
 }
