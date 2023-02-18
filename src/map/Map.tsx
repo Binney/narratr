@@ -1,7 +1,8 @@
 import { Vector2d } from "konva/lib/types";
 import { useState } from "react"
-import { Stage, Circle, Layer, Rect, Arrow, Image } from "react-konva";
+import { Stage, Circle, Layer, Rect, Arrow, Image, Text } from "react-konva";
 import useImage from "use-image";
+import DebugTooltip from "./DebugTooltip";
 import { metresPerDegreeLon, SpaceProps } from "./geography";
 import Gridlines from "./Gridlines";
 
@@ -34,6 +35,20 @@ export default function Map(props: MapProps) {
     const [error, setError] = useState('');
     const [lat, setLat] = useState(51.5628);
     const [lon, setLon] = useState(-0.1445);
+
+    const [mouseX, setMouseX] = useState(0);
+    const [mouseY, setMouseY] = useState(0);
+    function updateTracker(e: any) {
+        // TODO only works because map starts at (0,0) - fix
+        setMouseX(e.evt.offsetX);
+        setMouseY(e.evt.offsetY);
+    }
+
+    function updateTapper(e: any) {
+        setMouseX(e.evt?.changedTouches[0]?.clientX);
+        setMouseY(e.evt?.changedTouches[0]?.clientY);
+        // console.log(e);
+    }
 
     const [backgroundImage] = useImage(`/maps/${props.background}.jpg`);
 
@@ -72,6 +87,14 @@ export default function Map(props: MapProps) {
         return actualHeight - normalise(pos, props.southEdge, mapHeight, actualHeight);
     }
 
+    function denormaliseX(pos: number) {
+        return ((pos * mapWidth) / actualWidth) + props.westEdge;
+    }
+
+    function denormaliseY(pos: number) {
+        return (((actualHeight - pos) * mapHeight) / actualHeight) + props.southEdge;
+    }
+
     function lockToBounds(pos: Vector2d): Vector2d {
         let resX = pos.x;
         let resY = pos.y;
@@ -103,7 +126,8 @@ export default function Map(props: MapProps) {
         setError(JSON.stringify(err));
     })
     return <div>
-        <Stage width={viewportWidth} height={viewportHeight} draggable dragBoundFunc={lockToBounds}>
+        {/* TODO this makes gridlines update on every mousemove, fix */}
+        <Stage onMouseMove={updateTracker} onTap={updateTapper} width={viewportWidth} height={viewportHeight} draggable dragBoundFunc={lockToBounds}>
             <Layer>
                 <Rect x={0} y={0} width={actualWidth} height={actualHeight} fill={'grey'}></Rect>
                 <Image image={backgroundImage} width={actualWidth} height={actualHeight}></Image>
@@ -113,12 +137,13 @@ export default function Map(props: MapProps) {
                     colour='green' />
             </Layer>
             <Layer>
+                <OffscreenArrow towardsX={normalise(lon, props.westEdge, mapWidth, actualWidth)}
+                    towardsY={actualHeight - normalise(lat, props.southEdge, mapHeight, actualHeight)} />
                 <Circle x={normaliseX(lon)}
                     y={normaliseY(lat)}
                     fill={"red"} stroke={'black'} radius={10} strokeWidth={2}></Circle>
-                    <OffscreenArrow towardsX={normalise(lon, props.westEdge, mapWidth, actualWidth)}
-                        towardsY={actualHeight - normalise(lat, props.southEdge, mapHeight, actualHeight)} />
-                </Layer>
+                <DebugTooltip mouseX={mouseX} mouseY={mouseY} textX={denormaliseX(mouseX)} textY={denormaliseY(mouseY)} />
+            </Layer>
         </Stage>
 
         <p>{location}</p>

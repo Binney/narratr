@@ -20,7 +20,6 @@ export default function Gridlines(props: GridlinesProps) {
     const pxPerDegreeLat = (props.southEdge / 90) * props.canvasHeight / mapHeightDegrees;
     const pxSpacingLat = lineSpacingMetres * pxPerDegreeLat / metresPerDegreeLon;
 
-    console.log(pxSpacingLon);
     const numGridlinesV = Math.ceil(props.canvasWidth / pxSpacingLon);
     const numGridlinesH = Math.ceil(props.canvasHeight / pxSpacingLon);
 
