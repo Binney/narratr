@@ -17,7 +17,7 @@ export default function Player(props: PlayerProps) {
     const containerElement = useRef<HTMLDivElement>(null);
 
     function findLineFromAnchor(story: Story, anchor: string): number {
-        for (var i = 0; i < story.conversations.length; i++) {
+        for (var i = 0; i < story.conversations[conversation].lines.length; i++) {
             if (story.conversations[conversation].lines[i].anchor === anchor) {
                 return i;
             }
@@ -41,13 +41,12 @@ export default function Player(props: PlayerProps) {
     };
 
     function handleComplete() {
-        console.log('Well, it was a boring conversation anyway');
         handleSelect();
         setConversation(-1);
     };
 
     return <div ref={containerElement} className="player">
-        {history.map((historyItem, i) => <div key={i}>{HistoricLine(historyItem)}</div>)}
+        {history.map((historyItem, i) => <HistoricLine key={i} line={historyItem.line} choice={historyItem.choice}/>)}
         {conversation >= 0 &&
         <CurrentLine key={line} line={props.story.conversations[conversation].lines[line]}
             onUpdate={handleUpdate}

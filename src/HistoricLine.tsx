@@ -16,7 +16,7 @@ export default function HistoricLine(props: HistoryItem) {
         }
     }
 
-    return <div>
+    return <div className="container">
         <ReactMarkdown>{props.line.prose}</ReactMarkdown>
         {LockedChoice(props.choice || 0)}
     </div>

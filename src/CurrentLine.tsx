@@ -48,7 +48,7 @@ export default function CurrentLine(props: LineProps) {
         }
     }
 
-    return <div className="current-line">
+    return <div className="current-line container">
         <div className="current-section">
             <ReactMarkdown>{getText(textProgress)}</ReactMarkdown>
         </div>
