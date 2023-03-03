@@ -56,7 +56,12 @@ const preview: Story = {
         },
         {
             prose: "Then we'll begin.",
-            ending: true
+            choices: [
+                {
+                    option: ">",
+                    link: "/comingsoon"
+                }
+            ]
         }
     ]}]
 };

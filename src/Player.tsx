@@ -4,6 +4,7 @@ import HistoricLine, { HistoryItem } from "./HistoricLine";
 import { Story } from "./stories/Story";
 import "./Player.css";
 import ConversationStarter from "./ConversationStarter";
+import { useNavigate } from "react-router-dom";
 
 interface PlayerProps {
     story: Story
@@ -13,6 +14,7 @@ export default function Player(props: PlayerProps) {
     const [line, setLine] = useState(0);
     const [conversation, setConversation] = useState(0);
     const [history, setHistory] = useState<HistoryItem[]>([]);
+    const navigate = useNavigate();
 
     const containerElement = useRef<HTMLDivElement>(null);
 
@@ -28,6 +30,11 @@ export default function Player(props: PlayerProps) {
     function handleSelect(anchor?: string, choice?: number) {
         history.push({ line: props.story.conversations[conversation].lines[line], choice });
         setHistory(history);
+
+        if (anchor && anchor.startsWith("/")) {
+            navigate(anchor);
+            return;
+        }
 
         const next = anchor ? findLineFromAnchor(props.story, anchor) : line + 1;
         setLine(next);
