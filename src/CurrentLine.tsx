@@ -24,16 +24,23 @@ export default function CurrentLine(props: LineProps) {
     }, [words]);
 
     useEffect(() => {
+        function completeLine() {
+            setShowChoices(true);
+            if (line.ending) {
+                onComplete();
+            }
+        }
+
         let hasPause = getText(textProgress).match(/[,.?!]$/);
         setTimeout(() => {
             if (textProgress >= words.length) {
-                setShowChoices(true);
+                completeLine();
             } else {
                 setTextProgress(textProgress + 1);
             }
             onUpdate();
         }, hasPause ? timeoutBreath : timeoutNormal);
-    }, [textProgress, getText, words, onUpdate]);
+    }, [textProgress, getText, line, words, onUpdate, onComplete]);
 
     function ActiveChoices(line: Line) {
         if (line.ending) {

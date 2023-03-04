@@ -8,6 +8,11 @@ export interface SpaceProps {
 export const metresPerDegreeLon = 6371 * 1000 * 2 * Math.PI / 360;
 export const scale = 1 * metresPerDegreeLon; // 1px = 1m
 
+export const defaultLocation = {
+    lat: 51.5592466,
+    lon: -0.1587467
+}
+
 // Nicked from https://www.movable-type.co.uk/scripts/latlong.html
 // Thanks, Chris!
 export function haversine(lat1: number, lon1: number, lat2: number, lon2: number): number {

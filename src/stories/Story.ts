@@ -1,19 +1,26 @@
 export type Line = {
-    anchor?: string,
-    prose: string,
-    link?: string,
+    anchor?: string;
+    prose: string;
+    link?: string;
     choices?: {
-        option: string,
-        link: string,
-    }[],
+        option: string;
+        link: string;
+    }[];
     ending?: boolean;
 }
 
 export type Conversation = {
-    lines: Line[],
+    trigger?: {
+        location: {
+            lat: number;
+            lon: number;
+        };
+        radius: number;
+    };
+    lines: Line[];
 }
 
 export type Story = {
-    title: string,
-    conversations: Conversation[],
+    title: string;
+    conversations: Conversation[];
 }
