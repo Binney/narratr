@@ -2,15 +2,15 @@ import { haversine } from "./map/geography";
 import { Story, Conversation } from "./stories/Story";
 
 interface ConversationStarterProps {
-    lat: number;
-    lon: number;
+    lat?: number;
+    lon?: number;
     story: Story;
     startConversation: (i: number) => void;
 }
 
 export default function ConversationStarter(props: ConversationStarterProps) {
-    function hasOverlap(lat: number, lon: number, conversation: Conversation) {
-        if (!conversation.trigger) return false;
+    function hasOverlap(lat: number | undefined, lon: number | undefined, conversation: Conversation) {
+        if (!conversation.trigger || !lat || !lon) return false; // these won't meaningfully ever be 0
         const distance = haversine(lat, lon, conversation.trigger?.location.lat, conversation.trigger.location.lon);
         return distance < conversation.trigger.radius;
     }

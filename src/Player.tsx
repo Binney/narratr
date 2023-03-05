@@ -5,19 +5,17 @@ import { Story } from "./stories/Story";
 import "./Player.css";
 import ConversationStarter from "./ConversationStarter";
 import { useNavigate } from "react-router-dom";
-import Geolocator from "./map/Geolocator";
-import { defaultLocation } from "./map/geography";
 
 interface PlayerProps {
-    story: Story
+    story: Story;
+    lat?: number;
+    lon?: number;
 }
 
 export default function Player(props: PlayerProps) {
     const [line, setLine] = useState(0);
     const [conversation, setConversation] = useState(0);
     const [history, setHistory] = useState<HistoryItem[]>([]);
-    const [lat, setLat] = useState(defaultLocation.lat);
-    const [lon, setLon] = useState(defaultLocation.lon);
     const navigate = useNavigate();
 
     const containerElement = useRef<HTMLDivElement>(null);
@@ -61,13 +59,7 @@ export default function Player(props: PlayerProps) {
         setConversation(i);
     }
 
-    function handleLocationUpdate(coords: GeolocationCoordinates) {
-        setLat(coords.latitude);
-        setLon(coords.longitude);
-    }
-
     return <div ref={containerElement} className="player">
-        <Geolocator onUpdate={handleLocationUpdate} />
         {history.map((historyItem, i) => <HistoricLine key={i} line={historyItem.line} choice={historyItem.choice}/>)}
         {conversation >= 0 &&
         <CurrentLine key={line} line={props.story.conversations[conversation].lines[line]}
@@ -76,7 +68,7 @@ export default function Player(props: PlayerProps) {
             onComplete={handleComplete}></CurrentLine>
         }
         {conversation === -1 &&
-            <ConversationStarter lat={lat} lon={lon} story={props.story} startConversation={startConversation}/>
+            <ConversationStarter lat={props.lat} lon={props.lon} story={props.story} startConversation={startConversation}/>
         }
     </div>
 }

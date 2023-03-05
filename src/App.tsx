@@ -5,6 +5,7 @@ import Splash from './routes/Splash';
 import preview from './stories/Preview';
 import demo from './stories/Demo';
 import DemoMap from './routes/DemoMap';
+import Game from './Game';
 
 const router = createBrowserRouter([
     {
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
     {
         // TODO better routing by slug
         path: "/stories/demo",
-        element: <Player story={demo} />
+        element: <Game story={demo} />
     }
 ])
 

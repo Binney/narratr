@@ -9,6 +9,8 @@ import { haversine, scale, SpaceProps } from "./geography";
 import Gridlines from "./Gridlines";
 
 interface MapProps extends SpaceProps {
+    lat: number;
+    lon: number;
     // TODO markers[]
     background: string;
 }
@@ -19,6 +21,8 @@ interface arrowProps {
 }
 
 export default function Map(props: MapProps) {
+    const centreLon = (props.eastEdge + props.westEdge) / 2;
+    const centreLat = (props.northEdge + props.southEdge) / 2;
     const viewportWidth = window.innerWidth;
     const viewportHeight = 300; // TODO ??
 
@@ -29,10 +33,6 @@ export default function Map(props: MapProps) {
 
     const actualWidth = mapWidth * scale;
     const actualHeight = mapHeight * scale;
-
-    const [error, setError] = useState('');
-    const [lat, setLat] = useState(51.5628);
-    const [lon, setLon] = useState(-0.1445);
 
     const [mouseX, setMouseX] = useState(0);
     const [mouseY, setMouseY] = useState(0);
@@ -63,7 +63,7 @@ export default function Map(props: MapProps) {
         let scale = Math.sqrt(deltaX * deltaX + deltaY * deltaY) * 2 / (actualHeight - edgeMargin);
         const arrowShortness = 0.4;
 
-        const distanceMetres = Math.round(haversine(lat, lon, 51.5628, -0.1445));
+        const distanceMetres = Math.round(haversine(props.lat, props.lon, centreLat, centreLon));
         const distanceParsed = distanceMetres > 2000 ? `${Math.round(distanceMetres / 1000)}km` : `${distanceMetres}m`;
         return <Group x={actualWidth / 2} y={actualHeight / 2}>
             <Arrow
@@ -126,14 +126,6 @@ export default function Map(props: MapProps) {
             y: resY
         };
     }
-
-    navigator.geolocation.watchPosition((position) => {
-        setLat(position.coords.latitude);
-        setLon(position.coords.longitude);
-    }, (err) => {
-        console.log(JSON.stringify(err));
-        setError(JSON.stringify(err));
-    })
     return <div>
         {/* TODO this makes gridlines update on every mousemove, fix */}
         <Stage onMouseMove={updateTracker} onTap={updateTapper} width={viewportWidth} height={viewportHeight} draggable dragBoundFunc={lockToBounds}>
@@ -147,19 +139,14 @@ export default function Map(props: MapProps) {
                     colour='green' />
             </Layer>
             <Layer>
-                <OffscreenArrow towardsX={lon2x(lon)}
-                    towardsY={lat2y(lat)} />
-                <Circle x={lon2x(lon)}
-                    y={lat2y(lat)}
+                <OffscreenArrow towardsX={lon2x(props.lon)}
+                    towardsY={lat2y(props.lat)} />
+                <Circle x={lon2x(props.lon)}
+                    y={lat2y(props.lat)}
                     fill={"red"} stroke={'black'} radius={10} strokeWidth={2}></Circle>
                 <DebugTooltip mouseX={mouseX} mouseY={mouseY} textX={y2lat(mouseX)} textY={x2lon(mouseY)} />
                 {demoMap.markers.map((marker, i) => <MapMarker key={i} lat={marker.lat} lon={marker.lon} name={marker.name} />)}
             </Layer>
         </Stage>
-
-        <div className="container">
-            <p>Story goes here</p>
-            <p>{ error && `Sorry, I couldn't find your location. The error was: ${error}`}</p>
-        </div>
     </div>
 }
