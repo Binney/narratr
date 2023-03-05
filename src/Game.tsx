@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { defaultLocation } from "./map/geography";
-import Map from "./map/Map";
+import MapViewer from "./map/MapViewer";
 import Player from "./Player";
 import { Story } from "./stories/Story";
 
@@ -28,12 +28,7 @@ export default function Game(props: GameProps) {
 
     return <div>
         <p>Menu button goes here</p>
-        <Map lat={lat} lon={lon}
-            westEdge={-0.149554}
-            eastEdge={-0.142024}
-            northEdge={51.564606}
-            southEdge={51.5611356}
-            background='fantasy_map_demo' />
+        {props.story.map && <MapViewer lat={lat} lon={lon} map={props.story.map} /> }
         <Player story={props.story} lat={lat} lon={lon} />
     </div>
 }

@@ -1,7 +1,9 @@
+import demoMap from "../maps/DemoMap";
 import { Story } from "./Story";
 
 const demo: Story = {
     title: 'Demo',
+    map: demoMap,
     conversations: [{
         lines: [
             {

@@ -1,3 +1,5 @@
+import { Map } from "./Map";
+
 export type Line = {
     anchor?: string;
     prose: string;
@@ -22,5 +24,6 @@ export type Conversation = {
 
 export type Story = {
     title: string;
+    map?: Map;
     conversations: Conversation[];
 }

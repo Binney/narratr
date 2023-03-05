@@ -3,16 +3,15 @@ import { useState } from "react"
 import { Stage, Circle, Layer, Rect, Arrow, Image, Group, Text } from "react-konva";
 import useImage from "use-image";
 import demoMap from "../maps/DemoMap";
-import { Marker } from "../stories/Map";
+import { Map, Marker } from "../stories/Map";
 import DebugTooltip from "./DebugTooltip";
-import { haversine, scale, SpaceProps } from "./geography";
+import { haversine, scale } from "./geography";
 import Gridlines from "./Gridlines";
 
-interface MapProps extends SpaceProps {
+interface MapProps {
     lat: number;
     lon: number;
-    // TODO markers[]
-    background: string;
+    map: Map;
 }
 
 interface arrowProps {
@@ -20,16 +19,17 @@ interface arrowProps {
     towardsY: number;
 }
 
-export default function Map(props: MapProps) {
-    const centreLon = (props.eastEdge + props.westEdge) / 2;
-    const centreLat = (props.northEdge + props.southEdge) / 2;
+export default function MapViewer(props: MapProps) {
+    const extent = props.map.extent;
+    const centreLon = (extent.eastEdge + extent.westEdge) / 2;
+    const centreLat = (extent.northEdge + extent.southEdge) / 2;
     const viewportWidth = window.innerWidth;
     const viewportHeight = 300; // TODO ??
 
     // Scale lines of longitude because they get closer together the closer you get to the North Pole
-    const mapWidth = (props.eastEdge - props.westEdge) * props.southEdge / 90;
+    const mapWidth = (extent.eastEdge - extent.westEdge) * extent.southEdge / 90;
     // ...whereas lines of latitude remain at constant spacing
-    const mapHeight = props.northEdge - props.southEdge;
+    const mapHeight = extent.northEdge - extent.southEdge;
 
     const actualWidth = mapWidth * scale;
     const actualHeight = mapHeight * scale;
@@ -47,7 +47,7 @@ export default function Map(props: MapProps) {
         setMouseY(e.evt?.changedTouches[0]?.clientY);
     }
 
-    const [backgroundImage] = useImage(`/maps/${props.background}.jpg`);
+    const [backgroundImage] = useImage(`/maps/${props.map.backgroundImage}.jpg`);
 
     function OffscreenArrow({ towardsX, towardsY }: arrowProps) {
         // TODO stick arrow on separate Stage and make it not pan
@@ -84,19 +84,19 @@ export default function Map(props: MapProps) {
     }
 
     function lon2x(pos: number) {
-        return normalise(pos, props.westEdge, mapWidth, actualWidth) * props.southEdge / 90;
+        return normalise(pos, extent.westEdge, mapWidth, actualWidth) * extent.southEdge / 90;
     }
 
     function lat2y(pos: number) {
-        return actualHeight - normalise(pos, props.southEdge, mapHeight, actualHeight);
+        return actualHeight - normalise(pos, extent.southEdge, mapHeight, actualHeight);
     }
 
     function y2lat(pos: number) { // only 90s kids will remember
-        return ((pos * mapWidth) / actualWidth) + props.westEdge;
+        return ((pos * mapWidth) / actualWidth) + extent.westEdge;
     }
 
     function x2lon(pos: number) {
-        return (((actualHeight - pos) * mapHeight) / actualHeight) + props.southEdge;
+        return (((actualHeight - pos) * mapHeight) / actualHeight) + extent.southEdge;
     }
 
     function MapMarker(props: Marker) {
@@ -133,8 +133,8 @@ export default function Map(props: MapProps) {
                 {/* TODO center on starting point, not (0, 0) */}
                 <Rect x={0} y={0} width={actualWidth} height={actualHeight} fill={'grey'}></Rect>
                 <Image image={backgroundImage} width={actualWidth} height={actualHeight}></Image>
-                <Gridlines eastEdge={props.eastEdge} westEdge={props.westEdge}
-                    northEdge={props.northEdge} southEdge={props.southEdge}
+                <Gridlines eastEdge={extent.eastEdge} westEdge={extent.westEdge}
+                    northEdge={extent.northEdge} southEdge={extent.southEdge}
                     canvasWidth={actualWidth} canvasHeight={actualHeight}
                     colour='green' />
             </Layer>

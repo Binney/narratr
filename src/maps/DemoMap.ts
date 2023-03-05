@@ -3,6 +3,12 @@ import { Map } from "../stories/Map";
 const demoMap: Map = {
     name: 'Fantasy Map Demo',
     backgroundImage: 'fantasy_map_demo',
+    extent: {
+        westEdge: -0.149554,
+        eastEdge: -0.142024,
+        northEdge: 51.564606,
+        southEdge: 51.5611356,
+    },
     markers: [
         {
             name: 'Wizard\'s Tower',

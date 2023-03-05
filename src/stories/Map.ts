@@ -1,3 +1,5 @@
+import { SpaceProps } from "../map/geography";
+
 export type Marker = {
     name: string;
     lat: number;
@@ -7,5 +9,6 @@ export type Marker = {
 export type Map = {
     name: string;
     backgroundImage: string;
+    extent: SpaceProps;
     markers: Marker[];
 }
